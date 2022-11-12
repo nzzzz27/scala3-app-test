@@ -1,24 +1,28 @@
-package scala
+package server
 
-import com.comcast.ip4s._
-import cats.effect._
+import com.comcast.ip4s.*
+import cats.effect.*
 import cats.effect.unsafe.IORuntime
-import cats.implicits._, org.http4s.implicits._
+import cats.implicits.*, org.http4s.implicits.*
 
-import org.http4s.dsl.io._
-// import org.http4s.implicits._
+import org.http4s.dsl.io.*
 import org.http4s.HttpRoutes
 import org.http4s.server.Router
 import org.http4s.ember.server.*
 
-// import org.http4s.twirl._
-import play.twirl.api._
+import play.twirl.api.*
 
-object Server extends IOApp, TwirlInstances {
+import model.site.ViewValueSiteTodoList
+import model.component.ViewValueTodoList
+
+object Server extends IOApp, TwirlInstances:
 
   val hooService = HttpRoutes.of[IO] {
-    case GET -> Root / "hoo" / age =>
-      Ok(html.Default(name = "hoo", age = age.toInt))
+    case GET -> Root / "list" =>
+      val vv = ViewValueSiteTodoList(
+        todoList = ViewValueTodoList.list,
+      )
+      Ok(site.html.List(vv))
   }
 
   val barService = HttpRoutes.of[IO] {
@@ -38,4 +42,3 @@ object Server extends IOApp, TwirlInstances {
       .build
       .useForever
       .as(ExitCode.Success)
-}

@@ -1,0 +1,17 @@
+@import play.twirl.api.Html
+@import model.site.ViewValueSiteLayout
+
+@(vv: ViewValueSiteLayout)(content: Html)
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width,initial-scale=1" />
+   <title>@vv.title</title>
+   <meta name="description" content="ページの説明" />
+   <meta name="format-detection" content="telephone=no" />
+  </head>
+  <body>
+    @content
+  </body>
+</html>

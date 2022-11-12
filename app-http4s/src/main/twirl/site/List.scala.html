@@ -1,0 +1,11 @@
+@import model.site.ViewValueSiteTodoList
+
+@(vv: ViewValueSiteTodoList)
+
+@html.Main(vv: ViewValueSiteTodoList) {
+  @for(todo <- vv.todoList) {
+    <div>
+      <p>@todo.text</p>
+    </div>
+  }
+}
