@@ -1,4 +1,4 @@
 package model.site
 
 trait ViewValueSiteLayout:
-  val title: String
+  val pageTitle: String

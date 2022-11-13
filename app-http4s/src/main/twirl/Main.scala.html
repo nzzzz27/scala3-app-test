@@ -7,11 +7,27 @@
   <head>
    <meta charset="utf-8" />
    <meta name="viewport" content="width=device-width,initial-scale=1" />
-   <title>@vv.title</title>
+   <title></title>
    <meta name="description" content="ページの説明" />
    <meta name="format-detection" content="telephone=no" />
   </head>
   <body>
-    @content
+    <div class="wrapper">
+      @content
+    </div>
   </body>
 </html>
+
+<style>
+body {
+  margin: 0;
+}
+
+.wrapper {
+  background-color: aliceblue;
+  width: 100vw;
+  height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+}
+</style>

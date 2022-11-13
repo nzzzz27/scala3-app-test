@@ -12,15 +12,26 @@ import org.http4s.ember.server.*
 
 import play.twirl.api.*
 
-import model.site.ViewValueSiteTodoList
-import model.component.ViewValueTodoList
+import model.site.*
+import model.component.ViewValueTodo
 
 object Server extends IOApp, TwirlInstances:
 
-  val hooService = HttpRoutes.of[IO] {
+  val todoService = HttpRoutes.of[IO] {
+    case GET -> Root / "list" / "edit" / id =>
+      val vv = ViewValueSiteTodoEdit(
+        pageTitle = "Edit Page",
+        todo      = ViewValueTodo.findById(id.toLong),
+      )
+      Ok(site.html.Edit(vv))
+
+    case POST -> Root / "list" / "edit" / id =>
+      Ok("Posted !")
+
     case GET -> Root / "list" =>
       val vv = ViewValueSiteTodoList(
-        todoList = ViewValueTodoList.list,
+        pageTitle = "List Page",
+        todoList = ViewValueTodo.list,
       )
       Ok(site.html.List(vv))
   }
@@ -30,8 +41,8 @@ object Server extends IOApp, TwirlInstances:
       Ok(html.Default(name = "bar", age = age.toInt))
   }
 
-  val services = hooService <+> barService
-  val httpApp = Router("/v1" -> hooService, "/v2" -> services).orNotFound
+  val services = todoService <+> barService
+  val httpApp = Router("/v1" -> services, "/" -> todoService).orNotFound
 
   def run(args: List[String]): IO[ExitCode] =
     EmberServerBuilder
