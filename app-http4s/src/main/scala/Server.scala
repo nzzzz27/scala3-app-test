@@ -9,6 +9,7 @@ import org.http4s.dsl.io.*
 import org.http4s.HttpRoutes
 import org.http4s.server.Router
 import org.http4s.ember.server.*
+import org.http4s.server.staticcontent.*
 
 import play.twirl.api.*
 
@@ -42,7 +43,11 @@ object Server extends IOApp, TwirlInstances:
   }
 
   val services = todoService <+> barService
-  val httpApp = Router("/v1" -> services, "/" -> todoService).orNotFound
+  val httpApp = Router(
+    "v1" -> services,
+    "assets" -> fileService(FileService.Config("./assets")),
+    "" -> todoService
+  ).orNotFound
 
   def run(args: List[String]): IO[ExitCode] =
     EmberServerBuilder
