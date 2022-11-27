@@ -38,8 +38,8 @@ object Server extends IOApp, TwirlInstances:
   }
 
   val barService = HttpRoutes.of[IO] {
-    case GET -> Root / "bar" / age =>
-      Ok(html.Default(name = "bar", age = age.toInt))
+    case GET -> Root / "bar" =>
+      Ok("OK !!")
   }
 
   val services = todoService <+> barService
