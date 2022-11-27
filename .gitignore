@@ -6,3 +6,4 @@ metals.sbt
 *.DS_Store
 
 target/
+ui/
