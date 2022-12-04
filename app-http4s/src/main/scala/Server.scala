@@ -5,6 +5,7 @@ import cats.effect.*
 import cats.effect.unsafe.IORuntime
 import cats.implicits.*, org.http4s.implicits.*
 
+import org.http4s.{ Response, Status }
 import org.http4s.dsl.io.*
 import org.http4s.HttpRoutes
 import org.http4s.server.Router
@@ -55,6 +56,7 @@ object Server extends IOApp, TwirlInstances:
       .withHost(ipv4"0.0.0.0")
       .withPort(port"8080")
       .withHttpApp(httpApp)
+      .withErrorHandler(error => IO(println{error.getMessage; error}).as(Response(Status.InternalServerError)))
       .build
       .useForever
       .as(ExitCode.Success)
