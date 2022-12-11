@@ -18,8 +18,8 @@ import org.http4s.client.*
 import model.json.{ JsValuePokemon, JsValuePokemonList }
 import model.site.ViewValueSitePokemonList
 
-class PokemonListController() extends http.TwirlInstance:
-  val request = Request[IO](method = Method.GET).withUri(Uri.unsafeFromString("https://pokeapi.co/api/v2/pokemon?limit=1&offset=0"))
+class PokemonController() extends http.TwirlInstance:
+  val request = Request[IO](method = Method.GET).withUri(Uri.unsafeFromString("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0"))
 
   def show(): IO[Response[IO]] =
     for

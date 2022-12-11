@@ -12,11 +12,11 @@ import controller.*
 
 object Routes:
 
-  val pokemonListController = PokemonListController()
+  val pokemonController = PokemonController()
 
   val service = HttpRoutes.of[IO] {
-    case GET -> Root / "list" =>
-      pokemonListController.show()
+    case GET -> Root =>
+      pokemonController.show()
   }
 
   val router = Router(
