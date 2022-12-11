@@ -1,4 +1,4 @@
-package scala
+package http
 
 import org.http4s.EntityEncoder
 import org.http4s.Charset
@@ -8,7 +8,7 @@ import org.http4s.headers.`Content-Type`
 import cats.effect.IO
 import play.twirl.api._
 
-trait TwirlInstances {
+trait TwirlInstance {
 
   given htmlContentEncoder(using charset: Charset = `UTF-8`): EntityEncoder[IO, Html] =
     contentEncoder(MediaType.text.html)

@@ -1,0 +1,12 @@
+@import model.site.ViewValueSitePokemonList
+
+@(vv: ViewValueSitePokemonList)
+@views.html.Default {
+  @if(vv.list.results.nonEmpty) {
+    <ul>
+    @for(item <- vv.list.results) {
+      <li><a href=@item.url>@item.name</a></li>
+    }
+    </ul>
+  }
+}
