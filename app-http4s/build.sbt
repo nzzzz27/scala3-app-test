@@ -39,7 +39,7 @@ import com.amazonaws.regions.{Region, Regions}
 Ecr / region           := Region.getRegion(Regions.AP_NORTHEAST_1)
 Ecr / repositoryName   := "scala3-app-test"
 Ecr / repositoryTags   := Seq(version.value, "latest")
-Ecr / localDockerImage := (packageName in Docker).value + ":" + (version in Docker).value
+localDockerImage in Ecr := (packageName in Docker).value + ":" + (version in Docker).value
 
 // Create the repository before authentication takes place (optional)
 // login in Ecr := ((login in Ecr) dependsOn (createRepository in Ecr)).value
