@@ -8,6 +8,7 @@ lazy val doobieVersion  = "1.0.0-RC1"
 lazy val root = (project in file("."))
   .enablePlugins(SbtTwirl)
   .enablePlugins(JavaAppPackaging)
+  .enablePlugins(DockerPlugin)
   .enablePlugins(EcrPlugin)
   .settings(
     name := "scala3-app-test",
