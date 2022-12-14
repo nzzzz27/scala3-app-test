@@ -52,14 +52,14 @@ import ReleaseTransformations._
 releaseVersionBump := sbtrelease.Version.Bump.Bugfix
 releaseProcess := Seq[ReleaseStep](
   ReleaseStep(state => Project.extract(state).runTask(login in Ecr, state)._1),
-  inquireVersions,
-  runClean,
-  setReleaseVersion,
+  // inquireVersions,
+  // runClean,
+  // setReleaseVersion,
   ReleaseStep(state => Project.extract(state).runTask(publishLocal in Docker, state)._1),
   ReleaseStep(state => Project.extract(state).runTask(push in Ecr, state)._1),
-  commitReleaseVersion,
-  tagRelease,
-  setNextVersion,
-  commitNextVersion,
-  pushChanges
+  // commitReleaseVersion,
+  // tagRelease,
+  // setNextVersion,
+  // commitNextVersion,
+  // pushChanges
 )
