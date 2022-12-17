@@ -29,34 +29,37 @@ lazy val root = (project in file("."))
 
 TwirlKeys.templateImports := Seq.empty
 Compile / TwirlKeys.compileTemplates / sourceDirectories := (Compile / unmanagedSourceDirectories).value
+
+// --- [ Dockerfileの定義 ] -----------------
+// https://www.scala-sbt.org/sbt-native-packager/formats/docker.html
 Docker / version    := "0.0.1"
 Docker / maintainer := "sample@sample.com"
-Docker / dockerBaseImage     := "amazoncorretto:8"
+// amazoncorretto:11 (java -v 11) をDocker Imageのベースに使用
+dockerBaseImage     := "amazoncorretto:11"
 Docker / dockerExposedPorts  := Seq(8080, 8080)
-Docker / daemonUserUid := None
+// デフォルトでは以下が作成され、これを利用する。non-root user を実行ユーザーに指定することがベストプラクティスなため。
+// daemonUser: "demiourgos728" / daemonUserUid: 1001
+Docker / daemonUserUid       := None
 Docker / daemonUser          := "daemon"
 
-import com.amazonaws.regions.{Region, Regions}
+// --- [ Docker imageをpush先のECRを指定 ] ----------------
+import com.amazonaws.regions.{ Region, Regions }
 Ecr / region           := Region.getRegion(Regions.AP_NORTHEAST_1)
 Ecr / repositoryName   := "scala3-app-test"
 Ecr / repositoryTags   := Seq(version.value, "latest")
-localDockerImage in Ecr := (packageName in Docker).value + ":" + (version in Docker).value
+Ecr / localDockerImage := (Docker / packageName).value + ":" + (Docker / version).value
 
-// Create the repository before authentication takes place (optional)
-// login in Ecr := ((login in Ecr) dependsOn (createRepository in Ecr)).value
-
-// Authenticate and publish a local Docker image before pushing to ECR
-// push in Ecr := ((push in Ecr) dependsOn (publishLocal in Docker, login in Ecr)).value
-
+// --- [ リリースコマンド設定 ] ----------------
+// https://github.com/sbt/sbt-release
 import ReleaseTransformations._
-releaseVersionBump := sbtrelease.Version.Bump.Bugfix
+// releaseVersionBump := sbtrelease.Version.Bump.Bugfix
 releaseProcess := Seq[ReleaseStep](
-  ReleaseStep(state => Project.extract(state).runTask(login in Ecr, state)._1),
+  runClean,
+  ReleaseStep(state => Project.extract(state).runTask(Ecr / login, state)._1),
   // inquireVersions,
-  // runClean,
   // setReleaseVersion,
-  ReleaseStep(state => Project.extract(state).runTask(publishLocal in Docker, state)._1),
-  ReleaseStep(state => Project.extract(state).runTask(push in Ecr, state)._1),
+  ReleaseStep(state => Project.extract(state).runTask(Docker / publishLocal, state)._1),
+  ReleaseStep(state => Project.extract(state).runTask(Ecr / push, state)._1),
   // commitReleaseVersion,
   // tagRelease,
   // setNextVersion,
